@@ -28,7 +28,7 @@ struct cell
     }
 
 
-};
+}; //класс ячейка
 
 void make_change( vector < vector <cell> > &field, cell to_change )
 {
