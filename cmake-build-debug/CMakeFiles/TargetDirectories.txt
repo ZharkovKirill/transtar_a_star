@@ -1,0 +1,3 @@
+/home/keys/CLionProjects/transtar_astar/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/keys/CLionProjects/transtar_astar/cmake-build-debug/CMakeFiles/transtar_astar.dir
+/home/keys/CLionProjects/transtar_astar/cmake-build-debug/CMakeFiles/edit_cache.dir
