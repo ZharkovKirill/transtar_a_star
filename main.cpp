@@ -35,7 +35,7 @@ void make_change( vector < vector <cell> > &field, cell to_change )
     int x = to_change.x;
     int y = to_change.y;
 
-    if( field[y][x].priority > to_change.priority )
+    if(( field[y][x].priority > to_change.priority )||(!field[y][x].visit))
         field[y][x] = to_change;
 }
 vector <cell> neighbors(cell &point ,vector < vector <cell> > &field )
@@ -59,11 +59,12 @@ vector <cell> neighbors(cell &point ,vector < vector <cell> > &field )
 int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
 {
     priority_queue<cell> front;
+    start.visit = 1;
     front.push(start);
 
     cell current = front.top();
 
-    while ((finish.visit)&&(finish.priority > front.top().priority ))
+    while (!(finish.visit)||(finish.priority < front.top().priority ))
     {
 
         vector <cell> neb = neighbors(current,field);
@@ -74,10 +75,13 @@ int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
                 front.push(i);
             }
         }
-        current = front.top();
-        front.pop();
+
+
         make_change(field, current);
+        front.pop();
+        current = front.top();
     }
+    cout<<current.x<<' '<<current.y<<endl;
     return finish.path_l;
 }
 int main()
@@ -104,6 +108,8 @@ int main()
 
 
 
+
+    cout<<a_star(field,field[0][0],field[4][4]);
     for(auto i : field)
     {
         cout<<endl;
@@ -112,7 +118,5 @@ int main()
             cout<<j.priority<<' ';
         }
     }
-
-
     return 0;
 }
