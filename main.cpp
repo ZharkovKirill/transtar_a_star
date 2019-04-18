@@ -38,6 +38,7 @@ void make_change( vector < vector <cell> > &field, cell to_change )
 }
 vector <cell> neighbors(cell &point ,vector < vector <cell> > &field )
 {
+    point.visit = 1;
     int x = point.x;
     int y = point.y;
     vector <vector<int>> mask = {{1,0},{0,1},{-1,0},{0,-1}};
@@ -46,14 +47,27 @@ vector <cell> neighbors(cell &point ,vector < vector <cell> > &field )
         int buf_x = x + mask[i][1];
         int buf_y = y + mask[i][0];
         if ((buf_y < N) && (buf_x < M)
-        &&  (buf_x > 0) && (buf_y > 0))
+        &&  (buf_x >= 0) && (buf_y >= 0))
         {
             res.push_back(field[buf_y][buf_x]);
         }
     }
     return  res;
 }
+int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
+{
+    priority_queue<cell> front;
+    front.push(start);
 
+    cell current = front.top();
+
+    while ((finish.visit)&&(finish.priority > front.top().priority ))
+    {
+        vector <cell> neb = neighbors(current,field);
+
+    }
+
+}
 int main()
 {
     vector < vector <int> > hight_map = {{0,2,1,5,2},
@@ -68,19 +82,25 @@ int main()
         for (int j = 0; j < M; j++) {
 
             cell temp = {i, j,hight_map[i][j]};
+
             collum.push_back(temp);
 
 
         }
         field.push_back(collum);
     }
+
+
+
     for(auto i : field)
     {
         cout<<endl;
         for(auto j : i)
         {
-            cout<<j.visit<<' ';
+            cout<<j.priority<<' ';
         }
     }
+
+
     return 0;
 }
