@@ -7,7 +7,7 @@ struct cell
 {
     int y,x;
     int hight;
-    int path_l;
+    int path_l = 0;
     bool visit = 0;
     int priority;
 
@@ -34,7 +34,9 @@ void make_change( vector < vector <cell> > &field, cell to_change )
 {
     int x = to_change.x;
     int y = to_change.y;
-    field[y][x] = to_change;
+
+    if( field[y][x].priority > to_change.priority )
+        field[y][x] = to_change;
 }
 vector <cell> neighbors(cell &point ,vector < vector <cell> > &field )
 {
@@ -63,10 +65,20 @@ int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
 
     while ((finish.visit)&&(finish.priority > front.top().priority ))
     {
+
         vector <cell> neb = neighbors(current,field);
-
+        for(auto &i: neb) {
+            if (!i.visit) {
+                i.set_path(current);
+                i.set_priority(finish);
+                front.push(i);
+            }
+        }
+        current = front.top();
+        front.pop();
+        make_change(field, current);
     }
-
+    return finish.path_l;
 }
 int main()
 {
