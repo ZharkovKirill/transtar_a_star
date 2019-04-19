@@ -35,7 +35,7 @@ struct cell
     }
 
 
-}; //класс ячейка
+};
 bool cmp(cell a, cell b)
 {
     return (a.path_l<b.path_l);
@@ -192,7 +192,8 @@ vector< vector <int> > f_init(string field_name)
     }
     data.close();
     return  res;
-}
+
+
 int main()
 {
 
@@ -223,18 +224,9 @@ int main()
 
 
 
-
-    cout<<a_star(field,field[0][0],field[4][4]);
-    vector<cell> path= constructor_path_2(field,field[0][0],field[4][4]);
-    for(auto i : field)
-    {
-        cout<<endl;
-        for(auto j : i)
-        {
-            cout<<j.path_l<<' ';
-        }
-    }
-    cout<<endl;
+    cout<<"min_path"<<a_star(field,field[0][0],field[4][4])<<endl;
+    vector<cell> path = constructor_path_2(field,field[0][0],field[4][4]);
+    cout<<"path"<<endl;
     for(auto i :path)
     {
         cout<<i.x<<' '<<i.y<<endl;
