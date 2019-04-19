@@ -164,25 +164,21 @@ vector<cell> constructor_path_2(vector < vector <cell> > &field, cell &start, ce
     }
     return res;
 }
-vector< vector <int> > f_init(string field_name)
-{
+vector< vector <int> > f_init(string field_name) {
     ifstream data;
-    int n,m,buf = 0;
+    int n, m, buf = 0;
     vector<vector<int>> res;
 
     data.open(field_name);
-    if (data.fail())
-    {
+    if (data.fail()) {
         cout << "Could Not Open File\n";
     }
     data >> n >> m;
 
-    for(int i = 0;i<n;i++)
-    {
+    for (int i = 0; i < n; i++) {
 
         vector<int> line;
-        for (int j = 0; j < m; j++)
-        {
+        for (int j = 0; j < m; j++) {
             data >> buf;
             line.push_back(buf);
         }
@@ -191,9 +187,9 @@ vector< vector <int> > f_init(string field_name)
 
     }
     data.close();
-    return  res;
+    return res;
 
-
+}
 int main()
 {
 
