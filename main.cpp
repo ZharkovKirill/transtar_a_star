@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <algorithm>
+#include <fstream>
 #define N  5
 #define M  5
 using namespace std;
@@ -163,13 +164,48 @@ vector<cell> constructor_path_2(vector < vector <cell> > &field, cell &start, ce
     }
     return res;
 }
+vector< vector <int> > f_init(string field_name)
+{
+    ifstream data;
+    int n,m,buf = 0;
+    vector<vector<int>> res;
+
+    data.open(field_name);
+    if (data.fail())
+    {
+        cout << "Could Not Open File\n";
+    }
+    data >> n >> m;
+
+    for(int i = 0;i<n;i++)
+    {
+
+        vector<int> line;
+        for (int j = 0; j < m; j++)
+        {
+            data >> buf;
+            line.push_back(buf);
+        }
+
+        res.push_back(line);
+
+    }
+    data.close();
+    return  res;
+}
 int main()
 {
+
+
     vector < vector <int> > hight_map = {{0,1,1,5,2},
                                          {1,2,2,2,2},
                                          {1,5,2,2,2},
                                          {1,1,2,2,2},
                                          {7,2,1,1,6}};
+
+    vector<vector<int>> h_map = f_init("field.txt");
+
+
     vector < vector <cell> > field;
 
     for(int i = 0; i < N;i++) {
