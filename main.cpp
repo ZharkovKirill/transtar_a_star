@@ -94,7 +94,7 @@ int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
 
     return finish.path_l;
 }
-vector<cell> constructor_path(vector < vector <cell> > &field, cell &start, cell &finish)
+vector<cell> constructor_path_1(vector < vector <cell> > &field, cell &start, cell &finish)
 {
     for(auto &i: field)
     {
@@ -108,10 +108,12 @@ vector<cell> constructor_path(vector < vector <cell> > &field, cell &start, cell
     vector <cell> res;
     res.push_back(finish);
     cell current = finish;
+
     while(!(current == start)) {
         vector<cell> neb = neighbors(current, field);
         bool ext_neighbors = 0;
         sort(neb.begin(),neb.end(),cmp);
+
         for (auto &i: neb) {
             int diff_path = abs(current.path_l - i.path_l);
             int diff_high = abs(current.hight - i.hight);
@@ -125,12 +127,39 @@ vector<cell> constructor_path(vector < vector <cell> > &field, cell &start, cell
                 break;
             }
         }
+        //current=neb.front();
         if (!ext_neighbors)
         {
             make_change(field,current);
             current = field[current.from_y][current.from_x];
             res.pop_back();
         }
+
+
+    }
+    return res;
+}
+vector<cell> constructor_path_2(vector < vector <cell> > &field, cell &start, cell &finish)
+{
+    for(auto &i: field)
+    {
+        for(auto &j:i)
+        {
+            j.visit = 0;
+        }
+    }
+
+    vector <cell> res;
+    res.push_back(finish);
+    cell current = finish;
+
+    while(!(current == start)) {
+        vector<cell> neb = neighbors(current, field);
+        bool ext_neighbors = 0;
+        sort(neb.begin(),neb.end(),cmp);
+        make_change(field,current);
+        res.push_back(neb.front());
+        current = neb.front();
     }
     return res;
 }
@@ -160,13 +189,13 @@ int main()
 
 
     cout<<a_star(field,field[0][0],field[4][4]);
-    vector<cell> path= constructor_path(field,field[0][0],field[4][4]);
+    vector<cell> path= constructor_path_2(field,field[0][0],field[4][4]);
     for(auto i : field)
     {
         cout<<endl;
         for(auto j : i)
         {
-            cout<<j.hight<<' ';
+            cout<<j.path_l<<' ';
         }
     }
     cout<<endl;
