@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <algorithm>
 #define N  5
 #define M  5
 using namespace std;
@@ -10,13 +11,18 @@ struct cell
     int path_l = 0;
     bool visit = 0;
     int priority;
+    int from_y,from_x =0;
+
 
 
     bool operator<(cell const& rhs) const
     {
         return  (priority > rhs.priority);
     }
-
+    bool operator==(cell const& rhs) const
+    {
+        return (x == rhs.x)&&(y == rhs.y);
+    }
     void set_path(cell came_from)
     {
         path_l = came_from.path_l + abs(hight - came_from.hight) + 1;
@@ -29,7 +35,10 @@ struct cell
 
 
 }; //класс ячейка
-
+bool cmp(cell a, cell b)
+{
+    return (a.path_l<b.path_l);
+}
 void make_change( vector < vector <cell> > &field, cell to_change )
 {
     int x = to_change.x;
@@ -67,6 +76,7 @@ int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
     while (!(finish.visit)||(finish.priority < front.top().priority ))
     {
 
+        //cout<<current.y<<' '<<current.x<<endl;
         vector <cell> neb = neighbors(current,field);
         for(auto &i: neb) {
             if (!i.visit) {
@@ -81,16 +91,56 @@ int a_star(vector < vector <cell> > &field,cell &start, cell &finish)
         front.pop();
         current = front.top();
     }
-    cout<<current.x<<' '<<current.y<<endl;
+
     return finish.path_l;
+}
+vector<cell> constructor_path(vector < vector <cell> > &field, cell &start, cell &finish)
+{
+    for(auto &i: field)
+    {
+        for(auto &j:i)
+        {
+            j.visit = 0;
+        }
+    }
+
+
+    vector <cell> res;
+    res.push_back(finish);
+    cell current = finish;
+    while(!(current == start)) {
+        vector<cell> neb = neighbors(current, field);
+        bool ext_neighbors = 0;
+        sort(neb.begin(),neb.end(),cmp);
+        for (auto &i: neb) {
+            int diff_path = abs(current.path_l - i.path_l);
+            int diff_high = abs(current.hight - i.hight);
+            if (((diff_path - 1) == diff_high) && (!i.visit)) {
+                make_change(field,current);
+                res.push_back(i);
+                i.from_x = current.x;
+                i.from_y = current.y;
+                current = i;
+                ext_neighbors = 1;
+                break;
+            }
+        }
+        if (!ext_neighbors)
+        {
+            make_change(field,current);
+            current = field[current.from_y][current.from_x];
+            res.pop_back();
+        }
+    }
+    return res;
 }
 int main()
 {
-    vector < vector <int> > hight_map = {{0,2,1,5,2},
-                                         {1,2,1,1,5},
-                                         {5,5,2,4,8},
-                                         {6,1,2,5,2},
-                                         {7,2,18,3,6}};
+    vector < vector <int> > hight_map = {{0,1,1,5,2},
+                                         {1,2,2,2,2},
+                                         {1,5,2,2,2},
+                                         {1,1,2,2,2},
+                                         {7,2,1,1,6}};
     vector < vector <cell> > field;
 
     for(int i = 0; i < N;i++) {
@@ -110,13 +160,20 @@ int main()
 
 
     cout<<a_star(field,field[0][0],field[4][4]);
+    vector<cell> path= constructor_path(field,field[0][0],field[4][4]);
     for(auto i : field)
     {
         cout<<endl;
         for(auto j : i)
         {
-            cout<<j.priority<<' ';
+            cout<<j.hight<<' ';
         }
     }
-    return 0;
+    cout<<endl;
+    for(auto i :path)
+    {
+        cout<<i.x<<' '<<i.y<<endl;
+    }
+
+     return 0;
 }
